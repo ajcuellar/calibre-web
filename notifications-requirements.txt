@@ -1,0 +1,10 @@
+# Dependencias opcionales para el sistema de notificaciones de Calibre-Web
+# Instala solo las que necesites según los canales de notificación que uses
+
+# Para Web Push Notifications (opcional)
+# Descomenta si quieres usar notificaciones push en el navegador
+# pywebpush>=1.14.0
+
+# Requests ya está incluido en requirements.txt de Calibre-Web
+# Se usa para WhatsApp (Twilio) y Telegram
+# requests>=2.28.0

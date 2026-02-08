@@ -49,6 +49,13 @@ from .file_helper import validate_mime_type
 from .usermanagement import user_login_required, login_required_if_no_ano
 from .string_helper import strip_whitespaces
 
+# Import notification module
+try:
+    from . import notifications
+    notifications_available = True
+except ImportError:
+    notifications_available = False
+
 editbook = Blueprint('edit-book', __name__)
 log = logger.create()
 
@@ -155,6 +162,18 @@ def upload():
                 upload_text = N_("File %(file)s uploaded", file=link)
                 WorkerThread.add(current_user.name, TaskUpload(upload_text, escape(title)))
                 helper.add_book_to_thumbnail_cache(book_id)
+                
+                # Send notifications for new book
+                if notifications_available:
+                    try:
+                        notifications.send_new_book_notifications(
+                            book_title=title,
+                            authors=db_book.authors,
+                            book_id=book_id
+                        )
+                        log.info(f"New book notifications sent for: {title}")
+                    except Exception as e:
+                        log.error(f"Error sending notifications for new book: {e}")
 
                 if len(request.files.getlist("btn-upload")) < 2:
                     if current_user.role_edit() or current_user.role_admin():
