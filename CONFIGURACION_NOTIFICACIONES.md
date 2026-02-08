@@ -80,44 +80,73 @@ config_use_webpush = True
 
 ## EJEMPLO COMPLETO DE CONFIGURACIÓN
 
-# En tu archivo de configuración o base de datos:
+**⚠️ IMPORTANTE: Nunca subas credenciales reales a Git**
 
-"""
+### Opción 1: Variables de Entorno (RECOMENDADO)
+
+Crea un archivo `.env` en la raíz del proyecto (añadido a `.gitignore`):
+
+```bash
+# .env
+MAIL_SERVER=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USE_SSL=1
+MAIL_LOGIN=your-email@example.com
+MAIL_PASSWORD=your-app-password-here
+MAIL_FROM="Calibre-Web <your-email@example.com>"
+
+# Evolution API (WhatsApp)
+EVOLUTION_API_URL=http://localhost:8080
+EVOLUTION_API_KEY=your-secret-key-here
+EVOLUTION_API_INSTANCE=calibre-web
+
+# Telegram
+TELEGRAM_BOT_TOKEN=1234567890:REPLACE-WITH-YOUR-BOT-TOKEN
+```
+
+Luego en tu código Python:
+
+```python
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # Carga variables de .env
+
 config = {
-    # Email (usar configuración SMTP existente)
-    'mail_server': 'smtp.gmail.com',
-    'mail_port': 587,
-    'mail_use_ssl': 1,
-    'mail_login': 'tu-email@gmail.com',
-    'mail_password': 'tu_contraseña_o_app_password',
-    'mail_from': 'Calibre-Web <tu-email@gmail.com>',
+    # Email
+    'mail_server': os.getenv('MAIL_SERVER', 'smtp.gmail.com'),
+    'mail_port': int(os.getenv('MAIL_PORT', 587)),
+    'mail_use_ssl': int(os.getenv('MAIL_USE_SSL', 1)),
+    'mail_login': os.getenv('MAIL_LOGIN'),
+    'mail_password': os.getenv('MAIL_PASSWORD'),
+    'mail_from': os.getenv('MAIL_FROM'),
     
-    # Twilio (WhatsApp)
-    'config_use_twilio': True,
-    'config_twilio_sid': 'ACxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-    'config_twilio_token': 'tu_auth_token_de_twilio',
-    'config_twilio_whatsapp_from': '+14155238886',
-    
-    # Telegram
-    'config_use_telegram': True,
-    'config_telegram_bot_token': '1234567890:ABCdefGHIjklMNOpqrsTUVwxyz',
-    
-    # Web Push
-    'config_use_webpush': True,
-    'config_vapid_private_key': 'clave_privada_vapid_64_caracteres_hex',
-    'config_vapid_public_key': 'clave_publica_vapid_64_caracteres_hex',
-    'cEvolution API (WhatsApp)
-    'config_use_evolution_api': True,
-    'config_evolution_api_url': 'http://localhost:8080',
-    'config_evolution_api_key': 'tu_clave_secreta',
-    'config_evolution_api_instance': 'calibre-web',
+    # Evolution API
+    'config_use_evolution_api': os.getenv('EVOLUTION_API_URL') is not None,
+    'config_evolution_api_url': os.getenv('EVOLUTION_API_URL'),
+    'config_evolution_api_key': os.getenv('EVOLUTION_API_KEY'),
+    'config_evolution_api_instance': os.getenv('EVOLUTION_API_INSTANCE', 'calibre-web'),
     
     # Telegram
-    'config_use_telegram': True,
-    'config_telegram_bot_token': '1234567890:ABCdefGHIjklMNOpqrsTUVwxyz',
-    
-    # Web Push (básico)
-    'config_use_webpush': False,  # En desarrollo
+    'config_use_telegram': os.getenv('TELEGRAM_BOT_TOKEN') is not None,
+    'config_telegram_bot_token': os.getenv('TELEGRAM_BOT_TOKEN'),
+}
+```
+
+### Opción 2: Configuración desde Base de Datos
+
+Calibre-Web ya usa una base de datos para la configuración. Usa el panel de administración:
+
+```python
+# Ya está implementado en Calibre-Web
+# Admin → Edit Basic Configuration
+# No necesitas código adicional
+```
+
+### Opción 3: Docker Compose (solo para Docker)
+
+```yaml
+# docker-compose.yml
 □ WhatsApp
 □ Web Push
 """

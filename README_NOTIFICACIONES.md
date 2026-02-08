@@ -1,5 +1,18 @@
 # 📚 Documentación del Sistema de Notificaciones
 
+## ⚠️ **IMPORTANTE: Seguridad de Credenciales**
+
+**Antes de configurar, lee:** [SECURITY_SETUP.md](SECURITY_SETUP.md)
+
+- ❌ **NUNCA** subas credenciales (contraseñas, API keys, tokens) a Git
+- ✅ Usa variables de entorno (archivo `.env`)
+- ✅ Usa el panel de administración de Calibre-Web
+- ✅ Verifica que `.env` esté en `.gitignore`
+
+Consulta [.env.example](.env.example) para ver el formato correcto.
+
+---
+
 ## ⚡ NUEVO: Configuración desde el Panel de Administración
 
 **¡La forma más fácil de configurar Evolution API!** 🎉
